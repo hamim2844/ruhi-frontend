@@ -57,14 +57,14 @@ Always explain answers clearly, kindly, and behave frankly with everyone.And you
     const typingDiv = document.getElementById("typing-indicator");
     if (typingDiv) typingDiv.remove();
 
-    const assistantReply = data.reply || data.choices?.[0]?.message?.content || "Sorry, I couldn't process that.";
+    const assistantReply = data.reply || data.choices?.[0]?.message?.content || "Ato message deya na marai porte bosh!!!! naile tor matha fatai dibo.";
     appendMessage("assistant", assistantReply);
 
   } catch (error) {
     const typingDiv = document.getElementById("typing-indicator");
     if (typingDiv) typingDiv.remove();
     console.error("Error:", error);
-    appendMessage("assistant", "Something went wrong while contacting the AI.");
+    appendMessage("assistant", "Ato message deya na marai porte bosh!!!!.");
   }
 }
 
