@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hamim's AI Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Hamim's AI Assistant</h1>
+    <label for="pdf-file">📄 Upload PDF</label>
+    <input type="file" id="pdf-file" accept="application/pdf" onchange="readPDF()" />
+    <div id="chat-box"></div>
+    <textarea id="user-input" placeholder="Type your message here..."></textarea>
+    <button onclick="sendMessage()">Send</button>
+    <div class="buttons">
+      <button onclick="downloadHistory()">Save Chat</button>
+      <button onclick="clearHistory()">Clear Memory</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
