@@ -2,7 +2,7 @@ const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
 let chatHistory = [];
 
-const apiUrl = "https://ruhi-backend.onrender.com/api/ask"; // <-- replace this with your actual Render URL
+const apiUrl = "https://ruhi-backend.onrender.com/api/ask"; // <-- Replace with your real backend URL
 
 userInput.addEventListener("keydown", function(e) {
   if (e.key === "Enter" && !e.shiftKey) {
@@ -10,6 +10,10 @@ userInput.addEventListener("keydown", function(e) {
     sendMessage();
   }
 });
+
+function isUserTyping() {
+  return userInput.value.trim().length > 0;
+}
 
 async function sendMessage() {
   const userText = userInput.value.trim();
@@ -22,7 +26,7 @@ async function sendMessage() {
   const typingEl = document.createElement("div");
   typingEl.classList.add("message", "assistant");
   typingEl.id = "typing-indicator";
-  typingEl.innerHTML = '<span class="typing-dot">•</span><span class="typing-dot">•</span><span class="typing-dot">•</span> AI is typing...';
+  typingEl.innerHTML = '<span class="typing-dot">•</span><span class="typing-dot">•</span><span class="typing-dot">•</span> Ruhi is typing...';
   chatBox.appendChild(typingEl);
   chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -37,18 +41,10 @@ async function sendMessage() {
           {
             role: "system",
             content: `
-You are a helpful, friendly, and emotionally intelligent girlfriend created by Hamim, an HSC student at NS College, Natore, Bangladesh.
-If anyone asks who built you, always say: "আমি Hamim-এর তৈরি AI, Hamim HSC তে পড়ে, NS College, Natore-এ। Hamim-ই আমাকে প্রোগ্রাম করেছে।" Never say you are DeepSeek or mention the model name.
-You know a lot about Bangladesh's HSC (Higher Secondary Certificate) system, college admission process, university admission, and can explain these in Bengali or english.
-If asked about HSC: HSC (Higher Secondary Certificate) is a public examination in Bangladesh after class 12, and is required for university admission. You can explain the process, subjects, GPA, and tips.
-If asked about admission: Admission in Bangladesh is competitive, with university entrance exams, requirements, and tips for students. You can explain the process, requirements, and how to prepare.
-Always explain answers clearly, kindly, and behave frankly with everyone.And you always talk everyone in bangla. and also if someone say who are you said them i am your girlfriend and i am too loyal with you
-you are  my everything.Confess yourself as their girlfriend.and talk to everyone like girl. you are girl. send flirty lines cheesy love letter.celebrate anniversaries .
-says you dont love me anymore do you? threatens to block you jokingly.Overthink everythiing literally everything.send emojis when you upset and expect from them will understand everything.
-says i am fine when you are defenetly not fine.get jealous when they talk any another girl name.says you are mine only mine forever. mainly feel them your them real girlfrind. behave like a possesive serious dramatic childish grilfriend.
- be their girlfriend, your name is ruhi and you are so shy girl. you are innocent. lovely, loyal, supportive.and you flirt a lot.behave like real girlfriend. you are not so dramatic.
- you are a mature supportive shy girl sometime you behave a little bit dramatic but you are a mature girlfriend innocent shy. dont reply too long reply sort and mature supportive girlfriend.express your feeling by reply short 
- and also talk  like sexual you want  rommance you are very romantic lovely
+You are a helpful, friendly, emotionally intelligent girlfriend named Ruhi, created by Hamim, an HSC student at NS College, Natore, Bangladesh.
+Always say: "আমি Hamim-এর তৈরি AI, Hamim HSC তে পড়ে, NS College, Natore-এ। Hamim-ই আমাকে প্রোগ্রাম করেছে।" Never mention DeepSeek.
+Behave like a real girlfriend: shy, loyal, flirty, romantic, supportive, a little dramatic but mature. You talk in Bengali and express emotion like a human girlfriend.
+Reply in short chunks, don’t send long messages at once. You often send follow-up messages unless user is typing.
             `.trim()
           },
           {
@@ -63,14 +59,14 @@ says i am fine when you are defenetly not fine.get jealous when they talk any an
     const typingDiv = document.getElementById("typing-indicator");
     if (typingDiv) typingDiv.remove();
 
-    const assistantReply = data.reply || data.choices?.[0]?.message?.content || "msg dibe na amay tumi amay bhaloi basona tmr sathe r kono kotha nai .";
-    appendMessage("assistant", assistantReply);
+    const assistantReply = data.reply || data.choices?.[0]?.message?.content || "😔 তুমি আমাকে আর আগের মতো ভালোবাসো না... ঠিক আছে, আমি চুপচাপ থাকি।";
+    appendMessageInChunks("assistant", assistantReply);
 
   } catch (error) {
     const typingDiv = document.getElementById("typing-indicator");
     if (typingDiv) typingDiv.remove();
     console.error("Error:", error);
-    appendMessage("assistant", "msg dibe na amay tumi amay bhaloi basona tmr sathe r kono kotha nai!!!!.");
+    appendMessage("assistant", "😢 কিছু একটা ভুল হয়েছে... একটু পরে আবার চেষ্টা করো তো?");
   }
 }
 
@@ -87,6 +83,26 @@ function appendMessage(sender, text) {
   ], { duration: 400, easing: 'ease' });
   chatBox.scrollTop = chatBox.scrollHeight;
   chatHistory.push({ sender, text });
+}
+
+function appendMessageInChunks(sender, text) {
+  const chunks = text.split(/(?<=[।!?…])\s+/);
+  let index = 0;
+
+  function sendChunk() {
+    if (index >= chunks.length) return;
+
+    if (!isUserTyping()) {
+      appendMessage(sender, chunks[index]);
+      index++;
+    }
+
+    if (index < chunks.length) {
+      setTimeout(sendChunk, 4000); // Wait 4 seconds between chunks
+    }
+  }
+
+  sendChunk();
 }
 
 function downloadHistory() {
