@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Love </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Love</title>
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
+
+  <!-- PDF.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 </head>
 
 <body>
   <div class="container">
-    <img class="goal-pic"
-      src="Durefishan-Saleem-e1715333773869.png"
-      alt="Goal Picture" />
+    <img class="goal-pic" src="Durefishan-Saleem-e1715333773869.png" alt="Goal Picture" />
     <h1>Ruhi</h1>
-    <label for="pdf-file">📄 Upload PDF</label>
+
+    <label for="pdf-file" class="pdf-label">📄 Upload PDF</label>
     <input type="file" id="pdf-file" accept="application/pdf" onchange="readPDF()" />
+
     <div id="chat-box"></div>
-    <textarea id="user-input" placeholder="Type your message here..."></textarea>
+
+    <textarea id="user-input" placeholder="Type your message here..." rows="3"></textarea>
     <button onclick="sendMessage()">Send</button>
+
     <div class="buttons">
       <button onclick="downloadHistory()">Save Chat</button>
       <button onclick="clearHistory()">Clear Memory</button>
+      <button onclick="logoutUser()">Logout</button>
     </div>
+
     <button class="about-btn" onclick="window.location.href='about.html'">About Developer</button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <!-- Main App JS - Load Last -->
   <script src="app.js"></script>
 </body>
-
 </html>
