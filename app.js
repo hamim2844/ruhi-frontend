@@ -20,24 +20,24 @@ let currentUser = null;
 const apiUrl = "https://ruhi-backend.onrender.com/api/ask";
 
 // Event listener for Enter key
-userInput.addEventListener("keydown", function (e) {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-
-function isUserTyping() {
-  return userInput.value.trim().length > 0;
+if (userInput) {
+  userInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
 }
 
-// Save to localStorage
+function isUserTyping() {
+  return userInput?.value.trim().length > 0;
+}
+
 function saveLocalHistory() {
   if (!currentUser) return;
   localStorage.setItem(`chatHistory_${currentUser.uid}`, JSON.stringify(chatHistory));
 }
 
-// Load from localStorage
 function loadLocalHistory() {
   if (!currentUser) return false;
   const saved = localStorage.getItem(`chatHistory_${currentUser.uid}`);
@@ -53,7 +53,6 @@ function loadLocalHistory() {
   return false;
 }
 
-// Load from Firestore
 async function loadFirestoreHistory(userId) {
   try {
     const doc = await db.collection("chatHistories").doc(userId).get();
@@ -71,7 +70,6 @@ async function loadFirestoreHistory(userId) {
   }
 }
 
-// Save to Firestore
 async function saveFirestoreHistory(userId) {
   try {
     await db.collection("chatHistories").doc(userId).set({ messages: chatHistory });
@@ -80,7 +78,6 @@ async function saveFirestoreHistory(userId) {
   }
 }
 
-// Send message
 async function sendMessage() {
   const userText = userInput.value.trim();
   if (!userText) return;
@@ -137,7 +134,6 @@ Use short messages and send them in chunks if needed, unless user is typing.
   }
 }
 
-// Append message
 function appendMessage(sender, text, save = true) {
   const el = document.createElement("div");
   el.classList.add("message", sender);
@@ -158,7 +154,6 @@ function appendMessage(sender, text, save = true) {
   }
 }
 
-// Break into chunks
 function appendMessageInChunks(sender, text) {
   const chunks = text.split(/(?<=[।!?…])\s+/);
   let index = 0;
@@ -177,7 +172,6 @@ function appendMessageInChunks(sender, text) {
   sendChunk();
 }
 
-// Download
 function downloadHistory() {
   const blob = new Blob([JSON.stringify(chatHistory, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
@@ -186,7 +180,6 @@ function downloadHistory() {
   link.click();
 }
 
-// Clear
 function clearHistory() {
   chatHistory = [];
   chatBox.innerHTML = "";
@@ -196,16 +189,14 @@ function clearHistory() {
   }
 }
 
-// Logout
 function logoutUser() {
   auth.signOut().then(() => {
     window.location.href = "login.html";
   });
 }
 
-// PDF
 async function readPDF() {
-  const file = document.getElementById("pdf-file").files[0];
+  const file = document.getElementById("pdf-file")?.files?.[0];
   if (!file) return;
 
   const reader = new FileReader();
@@ -225,7 +216,6 @@ async function readPDF() {
   reader.readAsArrayBuffer(file);
 }
 
-// Firebase auth state
 auth.onAuthStateChanged(async (user) => {
   if (user) {
     currentUser = user;
@@ -240,7 +230,6 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-// 🌐 Make HTML buttons work
 window.sendMessage = sendMessage;
 window.clearHistory = clearHistory;
 window.downloadHistory = downloadHistory;
