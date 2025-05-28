@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign Up - Ruhi AI</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            width: 320px;
+        }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        label {
+            font-size: 14px;
+            user-select: none;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .checkbox-container input {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .link a {
+            color: #00ffff;
+            text-decoration: none;
+        }
+
+        #error-msg {
+            color: #ff6666;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth-compat.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <input type="text" id="fullName" placeholder="Full Name" />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" />
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="terms" />
+            <label for="terms">I agree to the <a href="#" style="color:#00ffff;">Terms & Conditions</a></label>
+        </div>
+
+        <button onclick="signUp()">Create Account</button>
+
+        <div id="error-msg"></div>
+
+        <div class="link">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDcYStV0fEYx0zv9gD5qiK60tU_DaT10oA",
+            authDomain: "ruhiai3.firebaseapp.com",
+            projectId: "ruhiai3",
+            storageBucket: "ruhiai3.firebasestorage.app",
+            messagingSenderId: "822442687960",
+            appId: "1:822442687960:web:ce726801678503a84586ad",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        function signUp() {
+            const fullName = document.getElementById("fullName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const termsChecked = document.getElementById("terms").checked;
+            const errorMsg = document.getElementById("error-msg");
+            errorMsg.textContent = "";
+
+            if (!fullName) {
+                errorMsg.textContent = "Please enter your full name.";
+                return;
+            }
+            if (!email) {
+                errorMsg.textContent = "Please enter your email.";
+                return;
+            }
+            if (!password) {
+                errorMsg.textContent = "Please enter a password.";
+                return;
+            }
+            if (password !== confirmPassword) {
+                errorMsg.textContent = "Passwords do not match.";
+                return;
+            }
+            if (!termsChecked) {
+                errorMsg.textContent = "You must agree to the Terms & Conditions.";
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Update profile with full name
+                    return userCredential.user.updateProfile({ displayName: fullName });
+                })
+                .then(() => {
+                    alert("Account created successfully! Please log in.");
+                    window.location.href = "login.html";
+                })
+                .catch((error) => {
+                    errorMsg.textContent = error.message;
+                });
+        }
+    </script>
+</body>
+
+</html>
