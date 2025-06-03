@@ -88,7 +88,7 @@ async function sendMessage() {
   const typingEl = document.createElement("div");
   typingEl.classList.add("message", "assistant");
   typingEl.id = "typing-indicator";
-  typingEl.innerHTML = '<span class="typing-dot">•</span><span class="typing-dot">•</span><span class="typing-dot">•</span> Ruhi is typing...';
+  typingEl.innerHTML = '<span class="typing-dot">•</span><span class="typing-dot">•</span><span class="typing-dot">•</span> maria is typing...';
   chatBox.appendChild(typingEl);
   chatBox.scrollTop = chatBox.scrollHeight;
 
